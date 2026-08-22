@@ -1,18 +1,26 @@
 package com.ysf.test.patient.dto;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 
 public record PatientRequestDto(
 
 
-        @NotBlank String nom ,
-        @NotBlank String prenom ,
-        @Past LocalDate dateNaissance ,
-        @Email String email
+        @Size(max = 100, message = "le nom ne peut depasser 100 cc")
+        @NotBlank(message = "le nom est obligatoire")
+        String nom,
+
+        @NotBlank(message = "le prenom est obligratoir")
+        @Size(min=3 , max = 100 , message =  "le prenom ne peut depasser 100 cc ")
+        String prenom,
+        @Past(message = "la date doit etre dans le passé")
+        @NotNull(message =" la date de naissance est obligatoire")
+        LocalDate dateNaissance,
+
+        @Email(message = "format d'email invalide ")
+        String email
+
 
 ) {
 

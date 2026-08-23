@@ -49,7 +49,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneric(Exception ex , HttpServletRequest req){
         log.error(ex.getMessage(), ex);
-        return build(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error", "Un erreur inattendue est survenue", req, null);
+        return build(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error", "Un erreur inattendue est survenue" + ex.getMessage(), req, null);
     }
 
 

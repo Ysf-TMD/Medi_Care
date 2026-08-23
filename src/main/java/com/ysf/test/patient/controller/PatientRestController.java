@@ -28,7 +28,7 @@ public class PatientRestController {
 
     private final PatientService patientService;
 
-    public PatientRestController(PatientServiceImp patientService) {
+    public PatientRestController(PatientService  patientService) {
         this.patientService = patientService;
     }
 
@@ -45,6 +45,10 @@ public class PatientRestController {
         return ResponseEntity.created(location).body(cree);
     }
 
+    @GetMapping()
+    public ResponseEntity<String> index(){
+        return ResponseEntity.ok("Medi_care welcome page ( home ) ");
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<PatientResponseDto> parId(@PathVariable Long id) throws Exception {

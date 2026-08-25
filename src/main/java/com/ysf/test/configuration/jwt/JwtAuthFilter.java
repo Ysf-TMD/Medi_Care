@@ -21,22 +21,28 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
     @Override
-    protected void doFilterInternal(HttpServletRequest request , HttpServletResponse response , FilterChain chain )
-    throws ServletException , IOException
-    {
+
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+            throws ServletException, IOException {
+
         String authHeader = request.getHeader("Authorization");
-        if(authHeader != null || authHeader.startsWith("Bearer ")) {
+
+        // Si header est null OU ne commence pas par "Bearer ", continuer sans JWT
+        if(authHeader == null || !authHeader.startsWith("Bearer ")) {
             chain.doFilter(request, response);
-            return ;
+            return;
         }
 
+        // Extraire et traiter le token
         String token = authHeader.substring(7);
-        String username = jwtService.extraireUsername(token) ;
+        String username = jwtService.extraireUsername(token);
 
         if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails user = userDetailsService.loadUserByUsername(username);
-            if(jwtService.estValid(token , user )){
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username , user.getAuthorities()) ;
+            if(jwtService.estValid(token, user)) {
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                        username, null, user.getAuthorities()
+                );
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
